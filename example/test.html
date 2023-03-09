@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  
+</head>
+<body>
+  <div id="name">Mike</div>
+
+  <script type="module">
+    import { Observer, Watcher } from '../core/index.js'
+    const data = {
+      name: 'name',
+      age: 18,
+      hobby: () => {
+        return 'basketball'
+      }
+    }
+    // 数据劫持
+    new Observer(data)
+    
+    const el = document.getElementById('name')
+    // 新建 watcher 实例
+    // 1. 内部会将 dep.target 指向当前 watcher 实例
+    // 2. 读取 data[name]，从而触发 name 的 getter 属性，进而把当前 watcher 当成依赖收集起来
+    // 3. 后续 修改 name 的值，就会触发 name 的 setter 触发，从而触发 当前 watcher 的 update（cb） 方法
+    new Watcher(data, 'name', (val) => el.innerHTML = val)
+
+    setTimeout(() => {
+      data.name = 'william'
+    }, 3000);
+  </script>
+</body>
+</html>
