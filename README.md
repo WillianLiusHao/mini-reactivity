@@ -2,7 +2,7 @@
 
 ## 流程梳理
 
-1. new Vue 的时候会将 data 传给 observer，进行递归的数据劫持
+### 1. new Vue 的时候会将 data 传给 observer，进行递归的数据劫持
   - get
     ```js
       // 收集依赖
@@ -16,7 +16,7 @@
       dep.notify()
     ```
 
-2. 在模板编译解析过程中，遇到响应式数据会对数据进行 new Watcher
+### 2. 在模板编译解析过程中，遇到响应式数据会对数据进行 new Watcher
   ```js
     // 编译插值表达式
     compileText(node) {
@@ -30,13 +30,13 @@
     }
   ```
 
-3. watcher 有三个属性和一个方法，分别是
+### 3. watcher 有三个属性和一个方法，分别是
   - vm：指向当前数据所在的 vue 实例
   - key：当前数据在 vue 实例中的key
   - cb：数据变动时的回调函数
   - update：`this.cb.call(this.vm, this.vm[this.key])`，更新 vm 实例上 key 属性的值
 
-4. 在新建 watcher 实例的时候，除了上述的3个属性，还会进行如下操作
+### 4. 在新建 watcher 实例的时候，除了上述的3个属性，还会进行如下操作
   - 通过 `Dep.target = this` 将依赖收集器 Dep 的静态属性 target 改为当前数据
   - 通过 `this.vm[this.key]` 触发 对当前数据的依赖收集
   - 收集完毕，清空 target 属性，Dep.target = null
